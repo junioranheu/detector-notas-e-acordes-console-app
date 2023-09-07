@@ -4,11 +4,18 @@ namespace DetectorNotasMusicais.App.Controllers
 {
     public sealed class AudioController
     {
+        #region variaveis_globais
+        static readonly int taxaAmostragem_kHz = 44100; // Taxa de amostragem (Sampling rate);
+        static readonly string[] listaNotasMusicais = { "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
+        static readonly float refFrequencia = 440.0f; // Frequência de referência para a nota A4 (440 Hz), utilizada para encontrar a distância em semitons de outras notas;
+        static readonly int refSemitonsPorOitava = 12; // Número de semitons por oitava;
+        static readonly int minFrequenciaHz = 30; // Frequência mínima esperada em Hz;
+        static readonly int maxFrequenciaHz = 1000; // Frequência máxima esperada em Hz
+        #endregion;
+
         public static void DetectarAudio()
         {
-            const int taxaAmostragem_kHz = 44100;
-
-            // Instancia um novo objeto para a captura de áudio do microfone do usuário;
+            // Instanciar um novo objeto para a captura de áudio do microfone do usuário;
             WaveInEvent mic = new()
             {
                 DeviceNumber = 0, // Identificação do dispositivo;
@@ -16,9 +23,9 @@ namespace DetectorNotasMusicais.App.Controllers
             };
 
             // Event handler para dados de áudio recebidos;
-            mic.DataAvailable += (sender, e) => ProcessarAudio(taxaAmostragem_kHz, e.Buffer, e.BytesRecorded);
+            mic.DataAvailable += (sender, e) => HandleDetectarAudio(taxaAmostragem_kHz, e.Buffer, e.BytesRecorded);
 
-            // Inicia a captura de áudio;
+            // Iniciar a captura de áudio;
             mic.StartRecording();
 
             Console.WriteLine("Pressione qualquer tecla para finalizar o processo.");
@@ -29,9 +36,10 @@ namespace DetectorNotasMusicais.App.Controllers
             mic.Dispose();
         }
 
-        private static void ProcessarAudio(int taxaAmostragem_kHz, byte[] buffer, int bytesLidos)
+        #region metodos_auxiliares
+        private static void HandleDetectarAudio(int taxaAmostragem_kHz, byte[] buffer, int bytesLidos)
         {
-            // Converte o áudio de bytes para array de float;
+            // Converter o áudio de bytes para array de float;
             float[] audioBuffer = new float[bytesLidos / 2];
 
             for (int i = 0; i < bytesLidos / 2; i++)
@@ -39,22 +47,18 @@ namespace DetectorNotasMusicais.App.Controllers
                 audioBuffer[i] = BitConverter.ToInt16(buffer, i * 2) / 32768f;
             }
 
-            // Detecte a frequência;
+            // Detectar a frequência;
             float frequencia = DetectarFrequencia(audioBuffer, taxaAmostragem_kHz);
 
             // Mapear a nota com base na frequência encontrada;
-            string nota = MapearNotaPeloTom(frequencia);
+            string nota = MapearNota(frequencia);
 
             Console.WriteLine($"Nota: {nota} | Frequência: {frequencia}");
         }
 
         private static float DetectarFrequencia(float[] audioBuffer, int taxaAmostragem_kHz)
         {
-            int minFrequenciaHz = 30; // Frequência mínima esperada em Hz;
-            int maxFrequenciaHz = 1000; // Frequência máxima esperada em Hz
-
-            float melhorFrequenciaEncontrada = 0;
-            float melhorCorrelacaoEncontrada = 0;
+            float melhorFrequenciaEncontrada = 0, melhorCorrelacaoEncontrada = 0;
 
             for (int lag = minFrequenciaHz; lag <= maxFrequenciaHz; lag++)
             {
@@ -75,33 +79,28 @@ namespace DetectorNotasMusicais.App.Controllers
             return melhorFrequenciaEncontrada;
         }
 
-        private static string MapearNotaPeloTom(float tom)
+        private static string MapearNota(float frequencia)
         {
-            const float refFrequencia = 440.0f; // Define a frequência de referência para A4 (440 Hz)
-            const int refSemitonsPorOitava = 12; // Define o número de semitons por oitava;
+            // Calcular o número de semitons distantes da nota de referência;
+            float distanciaEmSemitonsDaNotaDeRef = 12 * (float)Math.Log2(frequencia / refFrequencia);
 
-            // Calcula o número de semitons distantes da nota de referência;
-            float distanciaEmSemitonsDaNotaDeRef = 12 * (float)Math.Log2(tom / refFrequencia);
-
-            // Definir lista de notas musicais;
-            string[] listaNotasMusicais = { "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
-
-            // Calcule o index de notas;
+            // Calcular o index de notas;
             int index = (int)Math.Round(distanciaEmSemitonsDaNotaDeRef) % refSemitonsPorOitava;
 
-            // Certifique-se de que o índice da nota seja positivo;
+            // Certificar de que o índice da nota é positivo;
             if (index < 0)
             {
                 index += refSemitonsPorOitava;
             }
 
-            // Determine o número da oitava;
+            // Determinar o número da oitava;
             int oitava = 4 + (int)Math.Floor(distanciaEmSemitonsDaNotaDeRef / refSemitonsPorOitava);
 
-            // Construa o nome completo da nota, incluindo a oitava;
+            // Construir o nome completo da nota, incluindo a oitava;
             string nota = $"{listaNotasMusicais[index]}{oitava}";
 
             return nota;
         }
+        #endregion;
     }
 }

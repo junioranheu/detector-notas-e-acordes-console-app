@@ -1,4 +1,6 @@
-﻿using NAudio.CoreAudioApi;
+﻿using DetectorNotasMusicais.App.Models;
+using NAudio.CoreAudioApi;
+using static DetectorNotasMusicais.App.Utils.Fixtures.Void;
 
 namespace DetectorNotasMusicais.App.Controllers
 {
@@ -10,25 +12,32 @@ namespace DetectorNotasMusicais.App.Controllers
             return 0;
         }
 
-        static void ListarDispositivos()
+        static List<Dispositivo> ListarDispositivos()
         {
             MMDeviceEnumerator enumerador = new();
-            MMDeviceCollection? listaDispositivos = enumerador.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
+            MMDeviceCollection? enumeradorDispositivos = enumerador.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
 
-            if (!listaDispositivos.Any())
+            if (!enumeradorDispositivos.Any())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                throw new ApplicationException("Nenhum microfone foi encontrado para continuar o processo.");
+                EstourarExcecao("Nenhum microfone foi encontrado para continuar o processo.");
             }
 
-            Console.WriteLine("List of Active Microphones:");
-            foreach (var device in listaDispositivos)
+            List<Dispositivo> listaDispositivos = new();
+
+            foreach (var device in enumeradorDispositivos)
             {
-                Console.WriteLine($"Device Name: {device.FriendlyName}");
-                Console.WriteLine($"Device ID: {device.ID}");
-                Console.WriteLine($"Device State: {device.State}");
-                Console.WriteLine();
+                Dispositivo dispositivo = new()
+                {
+                    Id = xxxx,
+                    Codigo = device.ID,
+                    Nome = device.FriendlyName,
+                    Status = device.State
+                };
+
+                listaDispositivos.Add(dispositivo);
             }
+
+            return listaDispositivos;
         }
     }
 }

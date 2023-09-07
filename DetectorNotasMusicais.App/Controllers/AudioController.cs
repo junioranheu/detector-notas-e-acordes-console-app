@@ -13,12 +13,12 @@ namespace DetectorNotasMusicais.App.Controllers
         static readonly int maxFrequenciaHz = 1000; // Frequência máxima esperada em Hz
         #endregion;
 
-        public static void DetectarAudio()
+        public static void DetectarAudio(int dispositivoId)
         {
             // Instanciar um novo objeto para a captura de áudio do microfone do usuário;
             WaveInEvent mic = new()
             {
-                DeviceNumber = 0, // Identificação do dispositivo;
+                DeviceNumber = dispositivoId,
                 WaveFormat = new WaveFormat(taxaAmostragem_kHz, 1) // Mono, 44.1 kHz;
             };
 

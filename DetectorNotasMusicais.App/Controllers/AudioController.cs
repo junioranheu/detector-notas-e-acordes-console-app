@@ -1,4 +1,5 @@
 ﻿using NAudio.Wave;
+using static DetectorNotasMusicais.App.Utils.Fixtures.Void;
 
 namespace DetectorNotasMusicais.App.Controllers
 {
@@ -28,12 +29,14 @@ namespace DetectorNotasMusicais.App.Controllers
             // Iniciar a captura de áudio;
             mic.StartRecording();
 
-            Console.WriteLine("Pressione qualquer tecla para finalizar o processo.");
+            Console.WriteLine("\nPressione qualquer tecla para finalizar o programa. 🎶\n");
             Console.ReadKey();
 
             // Finalizar o processo;
             mic.StopRecording();
             mic.Dispose();
+            ExibirMensagemInicial();
+            Console.WriteLine("\nAdeus! 👋");
         }
 
         #region metodos_auxiliares

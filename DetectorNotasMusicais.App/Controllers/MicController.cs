@@ -50,7 +50,7 @@ namespace DetectorNotasMusicais.App.Controllers
 
             foreach (var item in listaDispositivos)
             {
-                Console.WriteLine($"{item.DispositivoId} — {item.Nome}");
+                Console.WriteLine($"🎤 #{item.DispositivoId} — {item.Nome}.");
             }
 
             int opcaoMax = listaDispositivos.Select(x => x.DispositivoId).Max();
@@ -63,7 +63,7 @@ namespace DetectorNotasMusicais.App.Controllers
 
                 if (!int.TryParse(input, out dispositivoId))
                 {
-                    Console.WriteLine("Valor inserido é inválido. Tente novamente.");
+                    Console.WriteLine("Valor inserido é inválido. Tente novamente. ❌");
                 }
 
                 if (dispositivoId < 1 || dispositivoId > opcaoMax)

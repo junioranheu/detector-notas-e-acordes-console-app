@@ -1,17 +1,11 @@
 ﻿using DetectorNotasMusicais.App.Controllers;
+using System.Text;
+using static DetectorNotasMusicais.App.Utils.Fixtures.Void;
 
-#region bem_vindo;
-Console.ForegroundColor = ConsoleColor.Cyan;
-Console.WriteLine(@"     _          _                
-    / \   _ __ | |__   ___ _   _ 
-   / _ \ | '_ \| '_ \ / _ \ | | |
-  / ___ \| | | | | | |  __/ |_| |
- /_/   \_\_| |_|_| |_|\___|\__,_|
-                                 ");
+Console.OutputEncoding = Encoding.UTF8;
 
-Console.WriteLine("Projeto criado por @junioranheu (com ajuda do ChatGPT 3.5)");
-Console.ResetColor();
-#endregion;
-
+ExibirMensagemInicial();
 int dispositivoId = MicController.DetectarDispositivo();
+
+ExibirMensagemInicial();
 AudioController.DetectarAudio(dispositivoId);

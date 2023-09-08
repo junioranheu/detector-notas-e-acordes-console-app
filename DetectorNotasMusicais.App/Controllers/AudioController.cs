@@ -21,7 +21,7 @@ namespace DetectorNotasMusicais.App.Controllers
             {
                 DeviceNumber = dispositivoId,
                 WaveFormat = new WaveFormat(taxaAmostragem_kHz, 1), // Mono, 44.1 kHz;
-                BufferMilliseconds = 500
+                BufferMilliseconds = 450 // "Delay" para capturar áudio;
             };
 
             // Event handler para dados de áudio recebidos;
@@ -29,10 +29,10 @@ namespace DetectorNotasMusicais.App.Controllers
 
             // Iniciar a captura de áudio;
             mic.StartRecording();
-            ExibirMensagemFinalizacao();
-            Console.ReadKey();
 
             // Finalizar o processo;
+            ExibirMensagemFinalizacao();
+            Console.ReadKey();
             mic.StopRecording();
             mic.Dispose();
             ExibirMensagemInicial();
@@ -64,10 +64,10 @@ namespace DetectorNotasMusicais.App.Controllers
                 ExibirMensagemInicial();
                 ExibirMensagemFinalizacao();
 
-                // Console.WriteLine($"Nota: {nota} | Frequência: {frequencia}");
+                const bool isExibirFrequencia = true;
                 Console.Write("Nota: ");
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write($"{nota}\n");
+                Console.Write($"{nota}{(isExibirFrequencia ? $" — {frequencia}" : string.Empty)}\n");
                 Console.ResetColor();
             }
         }

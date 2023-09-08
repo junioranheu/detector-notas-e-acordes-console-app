@@ -12,6 +12,7 @@ namespace DetectorNotasMusicais.App.Controllers
         static readonly int refSemitonsPorOitava = 12; // Número de semitons por oitava;
         static readonly int minFrequenciaHz = 30; // Frequência mínima esperada em Hz;
         static readonly int maxFrequenciaHz = 1000; // Frequência máxima esperada em Hz
+        const bool isExibirFrequencia = true; // Exibe ou esconde a frequência no output;
         #endregion;
 
         public static void DetectarAudio(int dispositivoId)
@@ -64,7 +65,6 @@ namespace DetectorNotasMusicais.App.Controllers
                 ExibirMensagemInicial();
                 ExibirMensagemFinalizacao();
 
-                const bool isExibirFrequencia = true;
                 Console.Write("Nota: ");
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write($"{nota}{(isExibirFrequencia ? $" — {frequencia}" : string.Empty)}\n");

@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics;
 using MathNet.Numerics.IntegralTransforms;
 using NAudio.Wave;
+using static DetectorNotasMusicais.App.Utils.Fixtures.Get;
 using static DetectorNotasMusicais.App.Utils.Fixtures.Void;
 
 namespace DetectorNotasMusicais.App.Controllers
@@ -12,7 +13,7 @@ namespace DetectorNotasMusicais.App.Controllers
         static readonly string[] listaNotasMusicais = { "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
         private const float refFrequencia = 440.0f; // Frequência de referência para a nota A4 (440 Hz), utilizada para encontrar a distância em semitons de outras notas;
         private const int refSemitonsPorOitava = 12; // Número de semitons por oitava;
-        private const float fatorLimiarDeSilencio = 0.01f; // Define o que é provavelmente silêncio ou não;
+        private const float fatorLimiarDeSilencio = 0.06f; // Define o que é provavelmente silêncio ou não;
         private const bool isExibirFrequencia = false; // Exibe ou esconde a frequência no output;
 
         static readonly List<string> listaNotas = new();
@@ -26,7 +27,7 @@ namespace DetectorNotasMusicais.App.Controllers
             {
                 DeviceNumber = dispositivoId,
                 WaveFormat = new WaveFormat(taxaAmostragem_kHz, 16, 1), // Mono, 44.1 kHz;
-                BufferMilliseconds = 200, // "Delay" para capturar áudio;
+                BufferMilliseconds = 150, // "Delay" para capturar áudio;
                 NumberOfBuffers = 3
             };
 
@@ -63,6 +64,7 @@ namespace DetectorNotasMusicais.App.Controllers
 
             // É necesário verificar se o ambiente está em silêncio para exibir novas atualizações;
             bool isProvavelmenteSilencio = maxAmplitude < fatorLimiarDeSilencio;
+            // Console.WriteLine($"isProvavelmenteSilencio: {isProvavelmenteSilencio} | maxAmplitude: {maxAmplitude} | fatorLimiarDeSilencio: {fatorLimiarDeSilencio}");
 
             if (!isProvavelmenteSilencio)
             {
@@ -83,12 +85,16 @@ namespace DetectorNotasMusicais.App.Controllers
             }
             else
             {
+                const int qtdMaxLoopsParaLimparListaNotas = 10;
                 qtdLoopsParaLimparListaNotas++;
                 // Console.WriteLine($"qtdLoopsParaLimparListaNotas: {qtdLoopsParaLimparListaNotas}");
 
-                if (qtdLoopsParaLimparListaNotas > 10)
+                if (qtdLoopsParaLimparListaNotas > qtdMaxLoopsParaLimparListaNotas)
                 {
-                    Console.WriteLine($"LISTA DE NOTAS: {string.Join(", ", listaNotas)}");
+                    List<string> listaNotasSemOitava = ObterTonsSemOitava(listaNotas);
+                    List<string> listaNotasSemDuplicatas = ObterArrayDistinct(listaNotasSemOitava);
+
+                    Console.WriteLine($"LISTA DE NOTAS: {string.Join(", ", listaNotasSemDuplicatas)}");
                     listaNotas.Clear();
                     qtdLoopsParaLimparListaNotas = 0;
                 }

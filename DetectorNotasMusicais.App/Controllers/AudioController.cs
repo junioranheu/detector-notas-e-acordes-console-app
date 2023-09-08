@@ -21,8 +21,9 @@ namespace DetectorNotasMusicais.App.Controllers
             WaveInEvent mic = new()
             {
                 DeviceNumber = dispositivoId,
-                WaveFormat = new WaveFormat(taxaAmostragem_kHz, 1), // Mono, 44.1 kHz;
-                BufferMilliseconds = 450 // "Delay" para capturar áudio;
+                WaveFormat = new WaveFormat(taxaAmostragem_kHz, 16, 1), // Mono, 44.1 kHz;
+                BufferMilliseconds = 450, // "Delay" para capturar áudio;
+                NumberOfBuffers = 3
             };
 
             // Event handler para dados de áudio recebidos;
@@ -121,7 +122,7 @@ namespace DetectorNotasMusicais.App.Controllers
 
         private static bool IsProvavelmenteSilencio(float frequencia)
         {
-            const int minAceitavel = 80;
+            const int minAceitavel = 75;
 
             bool isFrequenciaIgualAoMinimoAceitavel1 = frequencia == (float)taxaAmostragem_kHz / minFrequenciaHz;
             bool isFrequenciaMenorAoMinimoAceitavel2 = frequencia < minAceitavel;

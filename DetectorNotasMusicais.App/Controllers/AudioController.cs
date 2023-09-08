@@ -56,7 +56,10 @@ namespace DetectorNotasMusicais.App.Controllers
             // Mapear a nota com base na frequência encontrada;
             string nota = MapearNota(frequencia);
 
-            Console.WriteLine($"Nota: {nota} | Frequência: {frequencia}");
+            Console.Write("Nota: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write($"{nota}\n");
+            Console.ResetColor();
         }
 
         private static float DetectarFrequencia(float[] audioBuffer, int taxaAmostragem_kHz)

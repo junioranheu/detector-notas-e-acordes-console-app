@@ -23,7 +23,7 @@ namespace DetectorNotasMusicais.App.Controllers
                 DeviceNumber = dispositivoId,
                 WaveFormat = new WaveFormat(taxaAmostragem_kHz, 16, 1), // Mono, 44.1 kHz;
                 BufferMilliseconds = 450, // "Delay" para capturar áudio;
-                NumberOfBuffers = 3
+                // NumberOfBuffers = 3
             };
 
             // Event handler para dados de áudio recebidos;
@@ -92,7 +92,6 @@ namespace DetectorNotasMusicais.App.Controllers
                     melhorFrequenciaEncontrada = (float)taxaAmostragem_kHz / lag;
                 }
             }
-
 
             return melhorFrequenciaEncontrada;
         }

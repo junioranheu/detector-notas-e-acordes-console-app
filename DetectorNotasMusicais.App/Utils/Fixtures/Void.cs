@@ -5,7 +5,7 @@
         public static void EstourarExcecao(string ex)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(ex);
+            Console.WriteLine($"\n{ex}");
             Console.ResetColor();
             Environment.Exit(0);
         }

@@ -3,4 +3,4 @@
 Console.WriteLine("Iniciando o projeto");
 
 int dispositivoId = MicController.DetectarDispositivo();
-// AudioController.DetectarAudio(dispositivoId);
+AudioController.DetectarAudio(dispositivoId);

@@ -8,8 +8,10 @@ namespace DetectorNotasMusicais.App.Controllers
     {
         public static int DetectarDispositivo()
         {
-            ListarDispositivos();
-            return 0;
+            List<Dispositivo> listaDispositivos = ListarDispositivos();
+            int dispositivoId = SelecionarDispositivo(listaDispositivos);
+
+            return dispositivoId;
         }
 
         private static List<Dispositivo> ListarDispositivos()
@@ -40,6 +42,43 @@ namespace DetectorNotasMusicais.App.Controllers
             }
 
             return listaDispositivos;
+        }
+
+        private static int SelecionarDispositivo(List<Dispositivo> listaDispositivos)
+        {
+            Console.WriteLine("\nEscolha um dos dispositivos disponíveis abaixo:");
+
+            foreach (var item in listaDispositivos)
+            {
+                Console.WriteLine($"{item.DispositivoId} — {item.Nome}");
+            }
+
+            int opcaoMax = listaDispositivos.Select(x => x.DispositivoId).Max();
+            int dispositivoId = 0;
+
+            do
+            {
+                Console.Write("\nDispositivo: #");
+                string? input = Console.ReadLine();
+
+                if (!int.TryParse(input, out dispositivoId))
+                {
+                    Console.WriteLine("Valor inserido é inválido. Tente novamente.");
+                }
+
+                if (dispositivoId < 1 || dispositivoId > opcaoMax)
+                {
+                    const string msgUnicoDispositivo = "Há apenas 1 dispositivo válido. Escolha o número #1, por favor.";
+                    string msgMultiplosDispositivos = $"Escolha um dispositivo válido, do #1 ao #{opcaoMax}, por favor.";
+
+                    Console.WriteLine(opcaoMax > 1 ? msgMultiplosDispositivos : msgUnicoDispositivo);
+                }
+            } while (dispositivoId < 1 || dispositivoId > opcaoMax);
+
+            // Workaround: o dispositivo começa com 0, portanto é necessário subtrair 1 do escolhido pelo usuário;
+            dispositivoId -= 1;
+
+            return dispositivoId;
         }
     }
 }

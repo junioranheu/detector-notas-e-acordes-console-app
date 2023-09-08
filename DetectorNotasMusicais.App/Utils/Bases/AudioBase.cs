@@ -52,6 +52,28 @@ namespace DetectorNotasMusicais.App.Utils.Bases
             return maxIndex;
         }
 
+        internal static (float frequencia, bool isProvavelmenteSilencio) CalcularFrequencia_E_VerificarIsProvavelmentSilencio(int taxaAmostragem_kHz, byte[] buffer, int bytesLidos)
+        {
+            // Converter o áudio de bytes para array de float;
+            float[] audioBuffer = new float[bytesLidos / 2];
+            float maxAmplitude = 0;
+
+            for (int i = 0; i < bytesLidos / 2; i++)
+            {
+                audioBuffer[i] = BitConverter.ToInt16(buffer, i * 2) / 32768f;
+                maxAmplitude = Math.Max(maxAmplitude, Math.Abs(audioBuffer[i]));
+            }
+
+            // Detectar a frequência;
+            float frequencia = DetectarFrequencia(audioBuffer, taxaAmostragem_kHz);
+
+            // É necesário verificar se o ambiente está em silêncio para exibir novas atualizações;
+            bool isProvavelmenteSilencio = maxAmplitude < fatorLimiarDeSilencio;
+            // Console.WriteLine($"isProvavelmenteSilencio: {isProvavelmenteSilencio} | maxAmplitude: {maxAmplitude} | fatorLimiarDeSilencio: {fatorLimiarDeSilencio}");
+
+            return (frequencia, isProvavelmenteSilencio);
+        }
+
         internal static string MapearNota(float frequencia)
         {
             // Calcular o número de semitons distantes da nota de referência;

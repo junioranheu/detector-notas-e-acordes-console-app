@@ -38,22 +38,7 @@ namespace DetectorNotasMusicais.App.Controllers
 
         private static void HandleDetectarAcorde(int taxaAmostragem_kHz, byte[] buffer, int bytesLidos)
         {
-            // Converter o áudio de bytes para array de float;
-            float[] audioBuffer = new float[bytesLidos / 2];
-            float maxAmplitude = 0;
-
-            for (int i = 0; i < bytesLidos / 2; i++)
-            {
-                audioBuffer[i] = BitConverter.ToInt16(buffer, i * 2) / 32768f;
-                maxAmplitude = Math.Max(maxAmplitude, Math.Abs(audioBuffer[i]));
-            }
-
-            // Detectar a frequência;
-            float frequencia = DetectarFrequencia(audioBuffer, taxaAmostragem_kHz);
-
-            // É necesário verificar se o ambiente está em silêncio para exibir novas atualizações;
-            bool isProvavelmenteSilencio = maxAmplitude < fatorLimiarDeSilencio;
-            // Console.WriteLine($"isProvavelmenteSilencio: {isProvavelmenteSilencio} | maxAmplitude: {maxAmplitude} | fatorLimiarDeSilencio: {fatorLimiarDeSilencio}");
+            var (frequencia, isProvavelmenteSilencio) = CalcularFrequencia_E_VerificarIsProvavelmentSilencio(taxaAmostragem_kHz, buffer, bytesLidos);
 
             if (!isProvavelmenteSilencio)
             {
@@ -66,11 +51,7 @@ namespace DetectorNotasMusicais.App.Controllers
                 // Exibir nota;
                 ExibirMensagemInicial();
                 ExibirMensagemFinalizacao();
-
-                Console.Write("Nota: ");
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write($"{nota}{(isExibirFrequencia ? $" — {frequencia}" : string.Empty)}\n");
-                Console.ResetColor();
+                ExibirMensagemNota(nota, isExibirFrequencia, frequencia);
             }
             else
             {

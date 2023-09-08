@@ -29,5 +29,13 @@
             Console.ResetColor();
             Environment.Exit(0);
         }
+
+        public static void ExibirMensagemNota(string nota, bool isExibirFrequencia, float frequencia)
+        {
+            Console.Write("Nota: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write($"{nota}{(isExibirFrequencia ? $" — {frequencia}" : string.Empty)}\n");
+            Console.ResetColor();
+        }
     }
 }

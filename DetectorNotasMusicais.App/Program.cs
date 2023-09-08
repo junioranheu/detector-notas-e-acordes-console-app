@@ -8,4 +8,5 @@ ExibirMensagemInicial();
 int dispositivoId = MicController.DetectarDispositivo();
 
 ExibirMensagemInicial();
-AudioController.DetectarAudio(dispositivoId);
+//NotaController.DetectarAudio(dispositivoId);
+AcordeController.DetectarAudio(dispositivoId);

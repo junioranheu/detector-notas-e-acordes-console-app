@@ -5,7 +5,7 @@ using static DetectorNotasMusicais.App.Utils.Fixtures.Void;
 
 namespace DetectorNotasMusicais.App.Controllers
 {
-    public sealed class AudioController
+    public sealed class AcordeController
     {
         #region variaveis_globais
         private const int taxaAmostragem_kHz = 44100; // Taxa de amostragem (Sampling rate);
@@ -14,6 +14,9 @@ namespace DetectorNotasMusicais.App.Controllers
         private const int refSemitonsPorOitava = 12; // Número de semitons por oitava;
         private const float fatorLimiarDeSilencio = 0.01f; // Define o que é provavelmente silêncio ou não;
         private const bool isExibirFrequencia = false; // Exibe ou esconde a frequência no output;
+
+        static readonly List<string> listaNotas = new();
+        static int qtdLoopsParaLimparListaNotas = 0;
         #endregion;
 
         public static void DetectarAudio(int dispositivoId)
@@ -23,12 +26,12 @@ namespace DetectorNotasMusicais.App.Controllers
             {
                 DeviceNumber = dispositivoId,
                 WaveFormat = new WaveFormat(taxaAmostragem_kHz, 16, 1), // Mono, 44.1 kHz;
-                BufferMilliseconds = 500, // "Delay" para capturar áudio;
+                BufferMilliseconds = 200, // "Delay" para capturar áudio;
                 NumberOfBuffers = 3
             };
 
             // Event handler para dados de áudio recebidos;
-            mic.DataAvailable += (sender, e) => HandleDetectarAudio(taxaAmostragem_kHz, e.Buffer, e.BytesRecorded);
+            mic.DataAvailable += (sender, e) => HandleDetectarAcorde(taxaAmostragem_kHz, e.Buffer, e.BytesRecorded);
 
             // Iniciar a captura de áudio;
             mic.StartRecording();
@@ -43,7 +46,7 @@ namespace DetectorNotasMusicais.App.Controllers
         }
 
         #region metodos_auxiliares
-        private static void HandleDetectarAudio(int taxaAmostragem_kHz, byte[] buffer, int bytesLidos)
+        private static void HandleDetectarAcorde(int taxaAmostragem_kHz, byte[] buffer, int bytesLidos)
         {
             // Converter o áudio de bytes para array de float;
             float[] audioBuffer = new float[bytesLidos / 2];
@@ -63,8 +66,11 @@ namespace DetectorNotasMusicais.App.Controllers
 
             if (!isProvavelmenteSilencio)
             {
+                qtdLoopsParaLimparListaNotas = 0;
+
                 // Mapear a nota com base na frequência encontrada;
                 string nota = MapearNota(frequencia);
+                listaNotas.Add(nota);
 
                 // Exibir nota;
                 ExibirMensagemInicial();
@@ -74,6 +80,18 @@ namespace DetectorNotasMusicais.App.Controllers
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write($"{nota}{(isExibirFrequencia ? $" — {frequencia}" : string.Empty)}\n");
                 Console.ResetColor();
+            }
+            else
+            {
+                qtdLoopsParaLimparListaNotas++;
+                // Console.WriteLine($"qtdLoopsParaLimparListaNotas: {qtdLoopsParaLimparListaNotas}");
+
+                if (qtdLoopsParaLimparListaNotas > 10)
+                {
+                    Console.WriteLine($"LISTA DE NOTAS: {string.Join(", ", listaNotas)}");
+                    listaNotas.Clear();
+                    qtdLoopsParaLimparListaNotas = 0;
+                }
             }
         }
 

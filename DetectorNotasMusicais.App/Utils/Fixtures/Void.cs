@@ -17,6 +17,11 @@
             Console.ResetColor();
         }
 
+        public static void ExibirMensagemFinalizacao()
+        {
+            Console.WriteLine("\nPressione qualquer tecla para finalizar o programa. 🎶\n");
+        }
+
         public static void EstourarExcecao(string ex)
         {
             Console.ForegroundColor = ConsoleColor.Red;

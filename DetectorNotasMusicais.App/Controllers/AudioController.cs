@@ -28,8 +28,7 @@ namespace DetectorNotasMusicais.App.Controllers
 
             // Iniciar a captura de áudio;
             mic.StartRecording();
-
-            Console.WriteLine("\nPressione qualquer tecla para finalizar o programa. 🎶\n");
+            ExibirMensagemFinalizacao();
             Console.ReadKey();
 
             // Finalizar o processo;
@@ -53,13 +52,23 @@ namespace DetectorNotasMusicais.App.Controllers
             // Detectar a frequência;
             float frequencia = DetectarFrequencia(audioBuffer, taxaAmostragem_kHz);
 
-            // Mapear a nota com base na frequência encontrada;
-            string nota = MapearNota(frequencia);
+            // É necesário verificar se o ambiente está em silêncio para exibir novas atualizações;
+            bool isProvavelmenteSilencio = IsProvavelmenteSilencio(frequencia);
 
-            Console.Write("Nota: ");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write($"{nota}\n");
-            Console.ResetColor();
+            if (!isProvavelmenteSilencio)
+            {
+                // Mapear a nota com base na frequência encontrada;
+                string nota = MapearNota(frequencia);
+
+                ExibirMensagemInicial();
+                ExibirMensagemFinalizacao();
+
+                // Console.WriteLine($"Nota: {nota} | Frequência: {frequencia}");
+                Console.Write("Nota: ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write($"{nota}\n");
+                Console.ResetColor();
+            }
         }
 
         private static float DetectarFrequencia(float[] audioBuffer, int taxaAmostragem_kHz)
@@ -106,6 +115,11 @@ namespace DetectorNotasMusicais.App.Controllers
             string nota = $"{listaNotasMusicais[index]}{oitava}";
 
             return nota;
+        }
+
+        private static bool IsProvavelmenteSilencio(float frequencia)
+        {
+            return frequencia == (float)taxaAmostragem_kHz / minFrequenciaHz;
         }
         #endregion;
     }

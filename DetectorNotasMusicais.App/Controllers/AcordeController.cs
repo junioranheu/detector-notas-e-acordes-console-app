@@ -63,12 +63,48 @@ namespace DetectorNotasMusicais.App.Controllers
                 {
                     List<string> listaNotasSemOitava = ObterTonsSemOitava(listaNotas);
                     List<string> listaNotasSemDuplicatas = ObterArrayDistinct(listaNotasSemOitava);
+                    string acorde = MapearAcorde(listaNotasSemOitava);
 
-                    Console.WriteLine($"LISTA DE NOTAS: {string.Join(", ", listaNotasSemDuplicatas)}");
+                    Console.WriteLine($"Lista de notas tocadas: {string.Join(", ", listaNotasSemDuplicatas)}\nAcorde tocado: {acorde}");
                     listaNotas.Clear();
                     qtdLoopsParaLimparListaNotas = 0;
                 }
             }
+        }
+
+        private static string MapearAcorde(List<string> listaNotas)
+        {
+            Dictionary<string, List<string>> listaAcordes = new()
+            {
+                ["C"] = new List<string> { "C", "E", "G" },
+                ["D"] = new List<string> { "D", "F#", "A" },
+                ["E"] = new List<string> { "E", "G#", "B" },
+                ["F"] = new List<string> { "F", "A", "C" },
+                ["G"] = new List<string> { "G", "B", "D" },
+                ["A"] = new List<string> { "A", "C#", "E" },
+                ["B"] = new List<string> { "B", "D#", "F#" }
+            };
+
+            foreach (var acorde in listaAcordes)
+            {
+                bool isAcordeEmQuestao = true;
+
+                foreach (var nota in listaNotas)
+                {
+                    if (!acorde.Value.Contains(nota))
+                    {
+                        isAcordeEmQuestao = false;
+                        break;
+                    }
+                }
+
+                if (isAcordeEmQuestao)
+                {
+                    return acorde.Key;
+                }
+            }
+
+            return "Acorde desconhecido.";
         }
     }
 }

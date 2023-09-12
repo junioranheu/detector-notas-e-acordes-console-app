@@ -5,11 +5,24 @@ using static DetectorNotasMusicais.App.Utils.Fixtures.Void;
 
 namespace DetectorNotasMusicais.App.Controllers
 {
-    public sealed class AcordeController:AudioBase
+    public sealed class AcordeController : AudioBase
     {
+        #region variaveis
         static readonly List<string> listaNotas = new();
         static int qtdLoopsParaLimparListaNotas = 0;
- 
+
+        static readonly Dictionary<string, List<string>> dicionarioAcordes = new()
+        {
+            ["C"] = new List<string> { "C", "E", "G" },
+            ["D"] = new List<string> { "D", "F#", "A" },
+            ["E"] = new List<string> { "E", "G#", "B" },
+            ["F"] = new List<string> { "F", "A", "C" },
+            ["G"] = new List<string> { "G", "B", "D" },
+            ["A"] = new List<string> { "A", "C#", "E" },
+            ["B"] = new List<string> { "B", "D#", "F#" }
+        };
+        #endregion;
+
         public static void DetectarAudio(int dispositivoId)
         {
             // Instanciar um novo objeto para a captura de áudio do microfone do usuário;
@@ -74,18 +87,7 @@ namespace DetectorNotasMusicais.App.Controllers
 
         private static string MapearAcorde(List<string> listaNotas)
         {
-            Dictionary<string, List<string>> listaAcordes = new()
-            {
-                ["C"] = new List<string> { "C", "E", "G" },
-                ["D"] = new List<string> { "D", "F#", "A" },
-                ["E"] = new List<string> { "E", "G#", "B" },
-                ["F"] = new List<string> { "F", "A", "C" },
-                ["G"] = new List<string> { "G", "B", "D" },
-                ["A"] = new List<string> { "A", "C#", "E" },
-                ["B"] = new List<string> { "B", "D#", "F#" }
-            };
-
-            foreach (var acorde in listaAcordes)
+            foreach (var acorde in dicionarioAcordes)
             {
                 bool isAcordeEmQuestao = true;
 

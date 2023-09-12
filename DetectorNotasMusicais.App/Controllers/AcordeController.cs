@@ -76,37 +76,52 @@ namespace DetectorNotasMusicais.App.Controllers
                 {
                     List<string> listaNotasSemOitava = ObterTonsSemOitava(listaNotas);
                     List<string> listaNotasSemDuplicatas = ObterArrayDistinct(listaNotasSemOitava);
-                    string acorde = MapearAcorde(listaNotasSemOitava);
+                    var (isErro, strRetorno) = MapearAcorde(listaNotasSemDuplicatas);
 
-                    Console.WriteLine($"Lista de notas tocadas: {string.Join(", ", listaNotasSemDuplicatas)}\nAcorde tocado: {acorde}");
+                    if (isErro)
+                    {
+                        ExibirMensagemErro(msg: $"\n{strRetorno}", isLimparConsole: true);
+                        return;
+                    }
+
+                    Console.WriteLine($"Lista de notas tocadas: {string.Join(", ", listaNotasSemDuplicatas)}.\nAcorde tocado: {strRetorno}");
                     listaNotas.Clear();
                     qtdLoopsParaLimparListaNotas = 0;
                 }
             }
         }
 
-        private static string MapearAcorde(List<string> listaNotas)
+        private static (bool isErro, string strRetorno) MapearAcorde(List<string> listaNotas)
         {
-            foreach (var acorde in dicionarioAcordes)
+            if (listaNotas.Count < 3)
             {
-                bool isAcordeEmQuestao = true;
+                return (isErro: true, strRetorno: "O acorde precisa ter pelo menos 3 notas.");
+            }
 
-                foreach (var nota in listaNotas)
-                {
-                    if (!acorde.Value.Contains(nota))
-                    {
-                        isAcordeEmQuestao = false;
-                        break;
-                    }
-                }
+            foreach (var item in dicionarioAcordes)
+            {
+                List<string>? listaNotasNoAcorde = item.Value;
 
-                if (isAcordeEmQuestao)
+                if (VerificarNotasFazemParteDeUmAcordeValido(listaNotas, listaNotasNoAcorde))
                 {
-                    return acorde.Key;
+                    return (isErro: false, strRetorno: item.Key);
                 }
             }
 
-            return "Acorde desconhecido.";
+            return (isErro: true, strRetorno: "Acorde desconhecido.");
+        }
+
+        private static bool VerificarNotasFazemParteDeUmAcordeValido(List<string> listaNotas, List<string> notasAcorde)
+        {
+            foreach (var nota in notasAcorde)
+            {
+                if (!listaNotas.Contains(nota))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

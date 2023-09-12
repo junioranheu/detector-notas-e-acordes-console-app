@@ -37,5 +37,18 @@
             Console.Write($"{nota}{(isExibirFrequencia ? $" — {frequencia}" : string.Empty)}\n");
             Console.ResetColor();
         }
+
+        public static void ExibirMensagemErro(string msg, bool isLimparConsole)
+        {
+            if (isLimparConsole)
+            {
+                Console.Clear();
+                ExibirMensagemInicial();
+            }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(msg);
+            Console.ResetColor();
+        }
     }
 }

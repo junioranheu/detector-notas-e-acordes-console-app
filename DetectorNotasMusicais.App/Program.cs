@@ -10,7 +10,6 @@ bool isExibirMensagemInicial = true, isErroOpcaoDeteccaoEnum;
 OpcoesDeteccaoEnum? opcaoDeteccaoEnum;
 #endregion
 
-#region program
 ExibirMensagemInicial(opcaoDeteccaoEnum: null);
 int dispositivoId = MicController.DetectarDispositivo();
 
@@ -33,4 +32,3 @@ do
         ExibirMensagemErro("\nVocê deve selecionar uma das opções disponíveis abaixo:", isLimparConsole: true);
     }
 } while (isErroOpcaoDeteccaoEnum);
-#endregion;

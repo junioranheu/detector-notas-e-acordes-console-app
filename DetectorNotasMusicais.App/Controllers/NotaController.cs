@@ -1,4 +1,5 @@
-﻿using DetectorNotasMusicais.App.Utils.Bases;
+﻿using DetectorNotasMusicais.App.Enums;
+using DetectorNotasMusicais.App.Utils.Bases;
 using NAudio.Wave;
 using static DetectorNotasMusicais.App.Utils.Fixtures.Void;
 
@@ -28,7 +29,7 @@ namespace DetectorNotasMusicais.App.Controllers
             Console.ReadKey();
             mic.StopRecording();
             mic.Dispose();
-            ExibirMensagemInicial();
+            ExibirMensagemInicial(opcaoDeteccaoEnum: null);
             Console.WriteLine("\nAdeus! 👋");
         }
 
@@ -42,7 +43,7 @@ namespace DetectorNotasMusicais.App.Controllers
                 string nota = MapearNota(frequencia);
 
                 // Exibir nota;
-                ExibirMensagemInicial();
+                ExibirMensagemInicial(opcaoDeteccaoEnum: OpcoesDeteccaoEnum.Notas);
                 ExibirMensagemFinalizacao();
                 ExibirMensagemNota(nota, isExibirFrequencia, frequencia);
             }

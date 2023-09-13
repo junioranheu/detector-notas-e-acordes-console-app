@@ -60,18 +60,20 @@ namespace DetectorNotasMusicais.App.Controllers
             {
                 Console.Write("\nDispositivo: #");
                 string? input = Console.ReadLine();
+                bool isErroTryParse = false;
 
                 if (!int.TryParse(input, out dispositivoId))
                 {
-                    Console.WriteLine("Valor inserido é inválido. Tente novamente. ❌");
+                    isErroTryParse = true;
+                    ExibirMensagemErro(msg: "\nValor inserido é inválido. Tente novamente. ❌", isLimparConsole: false);
                 }
 
                 if (dispositivoId < 1 || dispositivoId > opcaoMax)
                 {
-                    const string msgUnicoDispositivo = "Há apenas 1 dispositivo válido. Escolha o número #1, por favor.";
-                    string msgMultiplosDispositivos = $"Escolha um dispositivo válido, do #1 ao #{opcaoMax}, por favor.";
+                    string msgUnicoDispositivo = $"{(isErroTryParse ? "" : "\n")}Há apenas 1 dispositivo válido. Escolha o número #1, por favor.";
+                    string msgMultiplosDispositivos = $"{(isErroTryParse ? "" : "\n")}Escolha um dispositivo válido, do #1 ao #{opcaoMax}, por favor.";
 
-                    Console.WriteLine(opcaoMax > 1 ? msgMultiplosDispositivos : msgUnicoDispositivo);
+                    ExibirMensagemErro(msg: opcaoMax > 1 ? msgMultiplosDispositivos : msgUnicoDispositivo, isLimparConsole: false);
                 }
             } while (dispositivoId < 1 || dispositivoId > opcaoMax);
 

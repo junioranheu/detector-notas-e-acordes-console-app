@@ -1,4 +1,5 @@
-﻿using DetectorNotasMusicais.App.Utils.Bases;
+﻿using DetectorNotasMusicais.App.Enums;
+using DetectorNotasMusicais.App.Utils.Bases;
 using NAudio.Wave;
 using static DetectorNotasMusicais.App.Utils.Fixtures.Get;
 using static DetectorNotasMusicais.App.Utils.Fixtures.Void;
@@ -21,7 +22,7 @@ namespace DetectorNotasMusicais.App.Controllers
             ["A"] = new List<string> { "A", "C#", "E" },
             ["B"] = new List<string> { "B", "D#", "F#" }
         };
-        #endregion;
+        #endregion
 
         public static void DetectarAudio(int dispositivoId)
         {
@@ -45,7 +46,7 @@ namespace DetectorNotasMusicais.App.Controllers
             Console.ReadKey();
             mic.StopRecording();
             mic.Dispose();
-            ExibirMensagemInicial();
+            ExibirMensagemInicial(opcaoDeteccaoEnum: null);
             Console.WriteLine("\nAdeus! 👋");
         }
 
@@ -62,7 +63,7 @@ namespace DetectorNotasMusicais.App.Controllers
                 listaNotas.Add(nota);
 
                 // Exibir nota;
-                ExibirMensagemInicial();
+                ExibirMensagemInicial(opcaoDeteccaoEnum: OpcoesDeteccaoEnum.Acordes);
                 ExibirMensagemFinalizacao();
                 ExibirMensagemNota(nota, isExibirFrequencia, frequencia);
             }

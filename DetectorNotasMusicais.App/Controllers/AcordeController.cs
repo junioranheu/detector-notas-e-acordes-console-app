@@ -96,7 +96,7 @@ namespace DetectorNotasMusicais.App.Controllers
         {
             if (listaNotas.Count < 3)
             {
-                return (isErro: true, strRetorno: "O acorde precisa ter pelo menos 3 notas.");
+                return (isErro: true, strRetorno: $"O acorde precisa ter pelo menos 3 notas.");
             }
 
             foreach (var item in dicionarioAcordes)

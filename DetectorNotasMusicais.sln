@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DetectorNotasMusicais.App", "DetectorNotasMusicais.App\DetectorNotasMusicais.App.csproj", "{73976AFA-6EE1-40DC-80FB-13267516F348}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DetectorNotasMusicais.App", "DetectorNotasMusicais.App\DetectorNotasMusicais.App.csproj", "{73976AFA-6EE1-40DC-80FB-13267516F348}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DetectorNotasMusicais.UnitTests", "DetectorNotasMusicais.UnitTests\DetectorNotasMusicais.UnitTests.csproj", "{BF6DD0BC-C2D3-47F0-8061-CC03BF0E0CAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{73976AFA-6EE1-40DC-80FB-13267516F348}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73976AFA-6EE1-40DC-80FB-13267516F348}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73976AFA-6EE1-40DC-80FB-13267516F348}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF6DD0BC-C2D3-47F0-8061-CC03BF0E0CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF6DD0BC-C2D3-47F0-8061-CC03BF0E0CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF6DD0BC-C2D3-47F0-8061-CC03BF0E0CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF6DD0BC-C2D3-47F0-8061-CC03BF0E0CAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

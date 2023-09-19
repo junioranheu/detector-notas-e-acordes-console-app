@@ -15,12 +15,19 @@ namespace DetectorNotasMusicais.App.Controllers
         static readonly Dictionary<string, List<string>> dicionarioAcordes = new()
         {
             ["C"] = new List<string> { "C", "E", "G" },
+            ["Cm"] = new List<string> { "C", "D#", "G" },
             ["D"] = new List<string> { "D", "F#", "A" },
+            ["Dm"] = new List<string> { "D", "F", "A" },
             ["E"] = new List<string> { "E", "G#", "B" },
+            ["Em"] = new List<string> { "E", "G", "B" },
             ["F"] = new List<string> { "F", "A", "C" },
+            ["Fm"] = new List<string> { "F", "G#", "C" },
             ["G"] = new List<string> { "G", "B", "D" },
+            ["Gm"] = new List<string> { "G", "A#", "D" },
             ["A"] = new List<string> { "A", "C#", "E" },
-            ["B"] = new List<string> { "B", "D#", "F#" }
+            ["Am"] = new List<string> { "A", "C", "E" },
+            ["B"] = new List<string> { "B", "D#", "F#" },
+            ["Bm"] = new List<string> { "B", "D", "F#" }
         };
         #endregion
 
@@ -92,7 +99,7 @@ namespace DetectorNotasMusicais.App.Controllers
             }
         }
 
-        private static (bool isErro, string strRetorno) MapearAcorde(List<string> listaNotas)
+        internal static (bool isErro, string strRetorno) MapearAcorde(List<string> listaNotas)
         {
             if (listaNotas.Count < 3)
             {

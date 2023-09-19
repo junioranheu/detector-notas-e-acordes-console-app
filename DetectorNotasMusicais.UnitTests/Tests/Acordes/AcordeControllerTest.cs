@@ -16,16 +16,16 @@ namespace DetectorNotasMusicais.UnitTests.Tests.Acordes
         #region test_data
         public static IEnumerable<object[]> TestData_Validar_MapearAcorde_Sucesso()
         {
-            yield return new object[] { new List<string> { "Apple", "Banana", "Cherry" }, "xxx", false };
-            yield return new object[] { new List<string> { "Dog", "Cat", "Fish" }, "xxx", false };
-            yield return new object[] { new List<string> { "Dog", "Cat", "Fish" }, "xxx", false };
-            yield return new object[] { new List<string> { "Dog", "Cat", "Fish" }, "xxx", false };
+            yield return new object[] { new List<string> { "C", "E", "G" }, "C" };
+            yield return new object[] { new List<string> { "C", "D#", "G" }, "Cm" };
+            yield return new object[] { new List<string> { "B", "D#", "F#" }, "B" };
+            yield return new object[] { new List<string> { "B", "D", "F#" }, "Bm" };
         }
         #endregion
 
         [Theory]
         [MemberData(nameof(TestData_Validar_MapearAcorde_Sucesso))]
-        public async Task Validar_MapearAcorde_Sucesso(List<string> listaNotas, string acorde, bool esperado)
+        public void Validar_MapearAcorde_Sucesso(List<string> listaNotas, string acorde)
         {
             // Arrange;
 
@@ -34,7 +34,8 @@ namespace DetectorNotasMusicais.UnitTests.Tests.Acordes
 
             // Assert;
             _output.WriteLine(strRetorno);
-            Assert.Equal(isErro, esperado);
+            Assert.False(isErro);
+            Assert.True(strRetorno == acorde);
         }
 
         //[Fact]

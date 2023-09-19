@@ -64,6 +64,7 @@ namespace DetectorNotasMusicais.App.Utils.Fixtures
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"\n{ex}");
             Console.ResetColor();
+            Console.ReadKey();
             Environment.Exit(0);
         }
 

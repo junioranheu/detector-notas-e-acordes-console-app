@@ -21,6 +21,15 @@ namespace DetectorNotasMusicais.UnitTests.Tests.Acordes
             yield return new object[] { new List<string> { "B", "D#", "F#" }, "B" };
             yield return new object[] { new List<string> { "B", "D", "F#" }, "Bm" };
         }
+
+        public static IEnumerable<object[]> TestData_Validar_MapearAcorde_Falha()
+        {
+            yield return new object[] { new List<string> { "C", "E", "B" } };
+            yield return new object[] { new List<string> { "C", "E" } };
+            yield return new object[] { new List<string> { "C" } };
+            yield return new object[] { new List<string> { } };
+            yield return new object[] { new List<string> { "X", "Y", "Z" } };
+        }
         #endregion
 
         [Theory]
@@ -38,23 +47,18 @@ namespace DetectorNotasMusicais.UnitTests.Tests.Acordes
             Assert.True(strRetorno == acorde);
         }
 
-        //[Fact]
-        //public async Task Listar_ChecarResultadoEsperado()
-        //{
-        //    // Arrange;
-        //    var paginacao = new Mock<PaginacaoInput>();
+        [Theory]
+        [MemberData(nameof(TestData_Validar_MapearAcorde_Falha))]
+        public void Validar_MapearAcorde_Falha(List<string> listaNotas)
+        {
+            // Arrange;
 
-        //    List<WardInput> listaInput = WardMock.CriarListaInput();
-        //    await _context.Wards.AddRangeAsync(_map.Map<List<Ward>>(listaInput));
-        //    await _context.SaveChangesAsync();
+            // Act;
+            var (isErro, strRetorno) = AcordeController.MapearAcorde(listaNotas);
 
-        //    var query = new ListarWardQuery(_context);
-
-        //    // Act;
-        //    var resp = await query.Execute(paginacao.Object, string.Empty);
-
-        //    // Assert;
-        //    Assert.True(resp.Any());
-        //}
+            // Assert;
+            _output.WriteLine(strRetorno);
+            Assert.True(isErro);
+        }
     }
 }
